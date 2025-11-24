@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Alphabet Chart</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #718096;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+
+        /* Alphabet Grid Container */
+        .alphabet-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto 30px;
+        }
+
+        /* Creating the alphabet grid as an image map */
+        .alphabet-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .letter-box {
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            user-select: none;
+        }
+
+        .letter-box:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        }
+
+        .letter-box:active {
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        /* Display Area */
+        .display-area {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .display-letter {
+            font-size: 6rem;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 20px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+            animation: bounceIn 0.5s ease;
+        }
+
+        .display-word {
+            font-size: 3rem;
+            color: white;
+            margin-bottom: 20px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: slideIn 0.5s ease;
+        }
+
+        .display-image {
+            width: 250px;
+            height: 250px;
+            background: white;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            animation: zoomIn 0.5s ease;
+        }
+
+        .initial-message {
+            font-size: 2rem;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Animations */
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0.3);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes zoomIn {
+            from {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .alphabet-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 10px;
+            }
+
+            .letter-box {
+                font-size: 2rem;
+            }
+
+            .display-letter {
+                font-size: 4rem;
+            }
+
+            .display-word {
+                font-size: 2rem;
+            }
+
+            .display-image {
+                width: 180px;
+                height: 180px;
+                font-size: 7rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .alphabet-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+            }
+
+            .letter-box {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Info Box */
+        .info-box {
+            background: #edf2f7;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .info-box p {
+            color: #4a5568;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Interactive Alphabet Chart</h1>
+        <p class="subtitle">Click on any letter to see an example!</p>
+
+        <!-- Alphabet Grid (Image Map) -->
+        <div class="alphabet-grid">
+            <div class="letter-box" onclick="showExample('A')">A</div>
+            <div class="letter-box" onclick="showExample('B')">B</div>
+            <div class="letter-box" onclick="showExample('C')">C</div>
+            <div class="letter-box" onclick="showExample('D')">D</div>
+            <div class="letter-box" onclick="showExample('E')">E</div>
+            <div class="letter-box" onclick="showExample('F')">F</div>
+            <div class="letter-box" onclick="showExample('G')">G</div>
+            <div class="letter-box" onclick="showExample('H')">H</div>
+            <div class="letter-box" onclick="showExample('I')">I</div>
+            <div class="letter-box" onclick="showExample('J')">J</div>
+            <div class="letter-box" onclick="showExample('K')">K</div>
+            <div class="letter-box" onclick="showExample('L')">L</div>
+            <div class="letter-box" onclick="showExample('M')">M</div>
+            <div class="letter-box" onclick="showExample('N')">N</div>
+            <div class="letter-box" onclick="showExample('O')">O</div>
+            <div class="letter-box" onclick="showExample('P')">P</div>
+            <div class="letter-box" onclick="showExample('Q')">Q</div>
+            <div class="letter-box" onclick="showExample('R')">R</div>
+            <div class="letter-box" onclick="showExample('S')">S</div>
+            <div class="letter-box" onclick="showExample('T')">T</div>
+            <div class="letter-box" onclick="showExample('U')">U</div>
+            <div class="letter-box" onclick="showExample('V')">V</div>
+            <div class="letter-box" onclick="showExample('W')">W</div>
+            <div class="letter-box" onclick="showExample('X')">X</div>
+            <div class="letter-box" onclick="showExample('Y')">Y</div>
+            <div class="letter-box" onclick="showExample('Z')">Z</div>
+        </div>
+
+        <!-- Display Area -->
+        <div class="display-area">
+            <div id="initial-message" class="initial-message">
+                👆 Click any letter above to start learning!
+            </div>
+            <div id="example-content" class="hidden">
+                <div class="display-letter" id="display-letter"></div>
+                <div class="display-word" id="display-word"></div>
+                <div class="display-image" id="display-image"></div>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <p>💡 <strong>Learning Tip:</strong> Each letter has a fun example with an emoji to help you remember!</p>
+        </div>
+    </div>
+
+    <script>
+        // Alphabet examples data - each letter mapped to a word and emoji
+        const alphabetData = {
+            'A': { word: 'Apple', emoji: '🍎' },
+            'B': { word: 'Ball', emoji: '⚽' },
+            'C': { word: 'Cat', emoji: '🐱' },
+            'D': { word: 'Dog', emoji: '🐕' },
+            'E': { word: 'Elephant', emoji: '🐘' },
+            'F': { word: 'Fish', emoji: '🐠' },
+            'G': { word: 'Grapes', emoji: '🍇' },
+            'H': { word: 'House', emoji: '🏠' },
+            'I': { word: 'Ice Cream', emoji: '🍦' },
+            'J': { word: 'Jug', emoji: '🏺' },
+            'K': { word: 'Kite', emoji: '🪁' },
+            'L': { word: 'Lion', emoji: '🦁' },
+            'M': { word: 'Moon', emoji: '🌙' },
+            'N': { word: 'Nest', emoji: '🪺' },
+            'O': { word: 'Orange', emoji: '🍊' },
+            'P': { word: 'Penguin', emoji: '🐧' },
+            'Q': { word: 'Queen', emoji: '👸' },
+            'R': { word: 'Rainbow', emoji: '🌈' },
+            'S': { word: 'Sun', emoji: '☀️' },
+            'T': { word: 'Tree', emoji: '🌳' },
+            'U': { word: 'Umbrella', emoji: '☂️' },
+            'V': { word: 'Van', emoji: '🚐' },
+            'W': { word: 'Watch', emoji: '⌚' },
+            'X': { word: 'Xylophone', emoji: '🎵' },
+            'Y': { word: 'Yacht', emoji: '⛵' },
+            'Z': { word: 'Zebra', emoji: '🦓' }
+        };
+
+        // Function to display the example when a letter is clicked
+        function showExample(letter) {
+            // Get the data for the clicked letter
+            const data = alphabetData[letter];
+            
+            // Hide initial message
+            document.getElementById('initial-message').classList.add('hidden');
+            
+            // Show example content
+            const exampleContent = document.getElementById('example-content');
+            exampleContent.classList.remove('hidden');
+            
+            // Update the display with the letter, word, and emoji
+            document.getElementById('display-letter').textContent = letter;
+            document.getElementById('display-word').textContent = data.word;
+            document.getElementById('display-image').textContent = data.emoji;
+            
+            // Add animation by removing and re-adding classes
+            const letterElem = document.getElementById('display-letter');
+            const wordElem = document.getElementById('display-word');
+            const imageElem = document.getElementById('display-image');
+            
+            // Remove animation classes
+            letterElem.style.animation = 'none';
+            wordElem.style.animation = 'none';
+            imageElem.style.animation = 'none';
+            
+            // Trigger reflow
+            void letterElem.offsetWidth;
+            
+            // Re-add animation classes
+            letterElem.style.animation = 'bounceIn 0.5s ease';
+            wordElem.style.animation = 'slideIn 0.5s ease';
+            imageElem.style.animation = 'zoomIn 0.5s ease';
+        }
+    </script>
+</body>
+</html>
